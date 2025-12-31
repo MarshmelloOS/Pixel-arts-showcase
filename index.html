@@ -66,6 +66,7 @@ button:hover { background: #2a3a4a; }
 </div>
 
 <script>
+const folder = "images/";
 const gallery = document.getElementById("gallery");
 const modal = document.getElementById("modal");
 const modalImg = document.getElementById("modalImg");
@@ -73,76 +74,61 @@ const closeBtn = document.getElementById("closeBtn");
 const downloadSmall = document.getElementById("downloadSmall");
 const downloadLarge = document.getElementById("downloadLarge");
 
-// ==== CONFIGURE ====
-const username = "yourusername";   // Replace with your GitHub username
-const repo = "pixel-gallery";       // Replace with your repo name
-const folder = "images";            // Folder containing PNGs
-// =================
-
 async function loadImages() {
-    const apiUrl = `https://api.github.com/repos/${username}/${repo}/contents/${folder}`;
-    const response = await fetch(apiUrl);
+    const response = await fetch(folder + "images.json");
     const files = await response.json();
-
-    files.forEach(file => {
-        if(file.name.endsWith(".png")){
-            addCard(file.download_url, file.name);
-        }
-    });
+    files.forEach(name => addCard(name));
 }
 
-function addCard(url, filename){
+function addCard(name) {
     const card = document.createElement("div");
     card.className = "card";
 
     const img = document.createElement("img");
-    img.src = url;
+    img.src = folder + name;
 
     const label = document.createElement("div");
     label.className = "name";
-    label.textContent = filename.replace(".png","");
+    label.textContent = name.replace(".png","");
 
     card.appendChild(img);
     card.appendChild(label);
     gallery.appendChild(card);
 
-    card.addEventListener("click", () => openModal(url, filename));
-}
+    card.addEventListener("click", () => {
+        modal.style.display = "flex";
+        modalImg.src = folder + name;
 
-function openModal(url, filename){
-    modal.style.display = "flex";
-    modalImg.src = url;
-
-    downloadSmall.onclick = () => {
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = filename;
-        a.click();
-    };
-
-    downloadLarge.onclick = () => {
-        const original = new Image();
-        original.src = url;
-        original.onload = () => {
-            const scale = 10;
-            const canvas = document.createElement("canvas");
-            canvas.width = original.width*scale;
-            canvas.height = original.height*scale;
-            const ctx = canvas.getContext("2d");
-            ctx.imageSmoothingEnabled = false;
-            ctx.drawImage(original,0,0,canvas.width,canvas.height);
-            canvas.toBlob(blob=>{
-                const a = document.createElement("a");
-                a.href = URL.createObjectURL(blob);
-                a.download = filename.replace(".png","_upscaled.png");
-                a.click();
-                URL.revokeObjectURL(a.href);
-            });
+        downloadSmall.onclick = () => {
+            const a = document.createElement("a");
+            a.href = folder + name;
+            a.download = name;
+            a.click();
         };
-    };
+
+        downloadLarge.onclick = () => {
+            const original = new Image();
+            original.src = folder + name;
+            original.onload = () => {
+                const scale = 10;
+                const canvas = document.createElement("canvas");
+                canvas.width = original.width * scale;
+                canvas.height = original.height * scale;
+                const ctx = canvas.getContext("2d");
+                ctx.imageSmoothingEnabled = false;
+                ctx.drawImage(original, 0, 0, canvas.width, canvas.height);
+                canvas.toBlob(blob => {
+                    const a = document.createElement("a");
+                    a.href = URL.createObjectURL(blob);
+                    a.download = name.replace(".png","_upscaled.png");
+                    a.click();
+                    URL.revokeObjectURL(a.href);
+                });
+            };
+        };
+    });
 }
 
-// Close modal
 closeBtn.addEventListener("click", ()=>modal.style.display="none");
 modal.addEventListener("click", e=>{ if(e.target===modal) modal.style.display="none"; });
 
