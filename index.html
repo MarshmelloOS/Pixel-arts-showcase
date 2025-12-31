@@ -6,7 +6,7 @@
 <style>
 body {
     margin: 0;
-    background: radial-gradient(circle at top, #1e2a3a, #0e1116);
+    background: radial-gradient(circle at top, #1f2f44, #121820); /* slightly brighter blue-ish */
     font-family: Arial, sans-serif;
     color: #cfe8ff;
 }
@@ -20,16 +20,19 @@ h1 { text-align: center; padding: 20px; }
 }
 .card {
     background: #121820;
-    border-radius: 12px;
+    border-radius: 0; /* square cards */
     padding: 10px;
     box-shadow: 0 0 15px rgba(0,0,0,0.1);
     display: flex;
     flex-direction: column;
     align-items: center;
-    transition: transform 0.15s;
+    transition: transform 0.08s, filter 0.08s; /* faster hover */
     cursor: pointer;
 }
-.card:hover { transform: scale(1.05); }
+.card:hover { 
+    transform: scale(1.02); /* smaller subtle zoom */
+    filter: brightness(1.12); /* slight brightness */
+}
 img { width: 400px; height: auto; image-rendering: pixelated; display: block; }
 .name { text-align: center; margin-top: 10px; font-size: 14px; opacity: 0.8; }
 
