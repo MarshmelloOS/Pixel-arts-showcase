@@ -10,7 +10,20 @@ body {
     font-family: Arial, sans-serif;
     color: #cfe8ff;
 }
-h1 { text-align: center; padding: 20px; }
+
+/* Header */
+.main-title {
+    text-align: center;
+    font-size: 64px;      /* really big */
+    font-weight: bold;     /* bold */
+    margin: 40px 0 20px 0;
+    line-height: 1.1;
+    color: #cfe8ff;
+}
+.main-title .pink {
+    color: #ff77cc;        /* pink ART */
+}
+
 .gallery {
     display: flex;
     flex-wrap: wrap;
@@ -56,7 +69,11 @@ button:hover { background: #2a3a4a; }
 </head>
 <body>
 
-<h1>MY PIXEL ART SHOWCASE</h1>
+<h1 class="main-title">
+    MY PIXEL <span class="pink">ART</span><br>
+    SHOWCASE
+</h1>
+
 <div class="gallery" id="gallery"></div>
 
 <div id="modal">
@@ -140,4 +157,3 @@ loadImages();
 
 </body>
 </html>
-
